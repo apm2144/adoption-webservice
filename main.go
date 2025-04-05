@@ -27,9 +27,10 @@ var dogs = []dog{
 
 func main() {
 	router := gin.Default()
-	router.GET("/dogs", getDogs)
-	router.GET("/dogs/:id", getDogByID)
-	router.POST("/dogs", postDog)
+	router.GET("/v1/dogs", getDogs)
+	router.GET("/v1/dogs/:id", getDogByID)
+	router.POST("/v1/dogs/:id", updateDogById)
+	router.POST("/v1/dogs", postDog)
 
 	router.Run("localhost:8080")
 }
@@ -63,13 +64,41 @@ func getDogByID(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid dog id type"})
 	}
 
-	// Loop over the list of albums, looking for
-	// an album whose ID value matches the parameter.
+	// Loop over the list of dogs, looking for
+	// an dog whose ID value matches the parameter.
 	for _, a := range dogs {
 		if a.ID == id {
 			c.IndentedJSON(http.StatusOK, a)
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "dog not found"})
+}
+
+// updateDogById updates the information for a dog using the JSON presented
+// only updates if the dog already exists
+func updateDogById(c *gin.Context) {
+	str_id := c.Param("id")
+	id, err := strconv.Atoi(str_id)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid dog id type"})
+		return
+	}
+
+	// Loop over the list of dogs, looking for
+	// an dog whose ID value matches the parameter.
+	for i, a := range dogs {
+		if a.ID == id {
+			// update the dog
+			var updatedDog dog
+			if err := c.BindJSON(&updatedDog); err != nil {
+				c.IndentedJSON(http.StatusInternalServerError, gin.H{"messsage": "error binding JSON"})
+				return
+			}
+			dogs[i] = updatedDog
+			c.IndentedJSON(http.StatusCreated, updatedDog)
+			return
+		}
+	}
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "cannot update, dog not found"})
 }
