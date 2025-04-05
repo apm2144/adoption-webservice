@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,6 +28,7 @@ var dogs = []dog{
 func main() {
 	router := gin.Default()
 	router.GET("/dogs", getDogs)
+	router.GET("/dogs/:id", getDogByID)
 	router.POST("/dogs", postDog)
 
 	router.Run("localhost:8080")
@@ -50,4 +52,24 @@ func postDog(c *gin.Context) {
 	// Add the new dog to the in-memory slice.
 	dogs = append(dogs, newDog)
 	c.IndentedJSON(http.StatusCreated, newDog)
+}
+
+// getDogByID locates the dog whose ID value matches the id
+// parameter sent by the client, then returns that dog as a response.
+func getDogByID(c *gin.Context) {
+	str_id := c.Param("id")
+	id, err := strconv.Atoi(str_id)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid dog id type"})
+	}
+
+	// Loop over the list of albums, looking for
+	// an album whose ID value matches the parameter.
+	for _, a := range dogs {
+		if a.ID == id {
+			c.IndentedJSON(http.StatusOK, a)
+			return
+		}
+	}
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
 }
