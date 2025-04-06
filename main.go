@@ -6,8 +6,11 @@ import (
 
 	"golang.org/x/exp/slices"
 
+	docs "Users/alanmcnaney/adoption-webservice/docs"
+
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/gin-swagger"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // dog represents data about an adoptable dog
@@ -30,11 +33,13 @@ var dogs = []dog{
 
 func main() {
 	router := gin.Default()
+	docs.SwaggerInfo.BasePath = "/"
 	router.GET("/v1/dogs", getDogs)
 	router.GET("/v1/dogs/:id", getDogByID)
 	router.POST("/v1/dogs/:id", updateDogById)
 	router.DELETE("v1/dogs/:id", adoptADog)
 	router.POST("/v1/dogs", postDog)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	router.Run("localhost:8080")
 }
