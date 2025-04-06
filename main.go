@@ -45,8 +45,8 @@ func main() {
 //	@Description	Get all dogs available for adoption
 //	@Tags			dogs
 //	@Produce		json
-//	@Success		200		{object} 	IndentedJSON
-//	@Failure		500		{object}	ErrorResponse
+//	@Success		200		{object}	dog
+//	@Failure		500		{object}	string
 //	@Router			/v1/dogs [get]
 func getDogs(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, dogs)
@@ -58,8 +58,8 @@ func getDogs(c *gin.Context) {
 //	@Description	Add a dog for adoption
 //	@Tags			dogs
 //	@Produce		json
-//	@Success		204		{object} 	IndentedJSON
-//	@Failure		500		{object}	ErrorResponse
+//	@Success		204		{object}	dog
+//	@Failure		500		{object}	string
 //	@Router			/v1/dogs [post]
 func postDog(c *gin.Context) {
 	var newDog dog
@@ -83,9 +83,9 @@ func postDog(c *gin.Context) {
 //	@Tags			dogs
 //	@Produce		json
 //	@Param			id		path		int			true	"Dog ID"
-//	@Success		200		{object}	IndentedJSON
-//	@Failure		404		{object}	ErrorResponse
-//	@Failure		500		{object}	ErrorResponse
+//	@Success		200		{object}	dog
+//	@Failure		404		{object}	string
+//	@Failure		500		{object}	string
 //	@Router			/v1/dogs/{id} [get]
 func getDogByID(c *gin.Context) {
 	str_id := c.Param("id")
@@ -105,7 +105,7 @@ func getDogByID(c *gin.Context) {
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "dog not found"})
 }
 
-// updateDogById updates the information for a dog using the JSON presented
+// updateDogById updates the information for a dog using the JSON sent in the body of the POST
 // only updates if the dog already exists
 //
 //	@Summary		Update a dog's information, if it exists
@@ -114,12 +114,11 @@ func getDogByID(c *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			id		path		int			true	"User ID"
-//	@Param			user	body		models.User	true	"User to update"
-//	@Success		204		{object}	interface{}
-//	@Failure		404		{object}	ErrorResponse
-//	@Failure		422		{object}	ErrorResponse
-//	@Failure		500		{object}	ErrorResponse
-//	@Router			/users/{id} [put]
+//	@Param			dog		body		dog			true	"Dog info for updating"
+//	@Success		204		{object}	dog
+//	@Failure		404		{object}	string
+//	@Failure		500		{object}	string
+//	@Router			/v1/dogs/{id} [post]
 func updateDogById(c *gin.Context) {
 	str_id := c.Param("id")
 	id, err := strconv.Atoi(str_id)
@@ -129,7 +128,7 @@ func updateDogById(c *gin.Context) {
 	}
 
 	// Loop over the list of dogs, looking for
-	// an dog whose ID value matches the parameter.
+	// a dog whose ID value matches the parameter.
 	for i, a := range dogs {
 		if a.ID == id {
 			// update the dog
@@ -146,6 +145,17 @@ func updateDogById(c *gin.Context) {
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "cannot update, dog not found"})
 }
 
+// adoptADog removes a dog from the system, because it has been adopted!
+//
+//	@Summary		Remove an adopted dog from the system
+//	@Description	Remove an adopted dog from the system
+//	@Tags			dogs
+//	@Produce		json
+//	@Param			id		path		int			true	"User ID"
+//	@Success		202		{object}	dog
+//	@Failure		404		{object}	string
+//	@Failure		500		{object}	string
+//	@Router			/v1/dogs/{id} [delete]
 func adoptADog(c *gin.Context) {
 	str_id := c.Param("id")
 	id, err := strconv.Atoi(str_id)

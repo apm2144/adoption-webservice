@@ -1,19 +1,140 @@
-basePath: /
-host: localhost:1337
+definitions:
+  main.dog:
+    properties:
+      age:
+        type: integer
+      breed:
+        type: string
+      description:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
 info:
-  contact:
-    email: almcnaney@gmail.com
-    name: API Support
-    url: http://www.swagger.io/support
-  description: Tracking dogs that are available for adoption!
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
-  title: Dog Adoption Service
-  version: "1.0"
-paths: {}
-schemes:
-- http
-- https
+  contact: {}
+paths:
+  /v1/dogs:
+    get:
+      description: Get all dogs available for adoption
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.dog'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all dogs available for adoption
+      tags:
+      - dogs
+    post:
+      description: Add a dog for adoption
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/main.dog'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add a dog for adoption
+      tags:
+      - dogs
+  /v1/dogs/{id}:
+    delete:
+      description: Remove an adopted dog from the system
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/main.dog'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Remove an adopted dog from the system
+      tags:
+      - dogs
+    get:
+      description: Gets a dog by it's id
+      parameters:
+      - description: Dog ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.dog'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Gets a dog by it's id
+      tags:
+      - dogs
+    post:
+      consumes:
+      - application/json
+      description: Update a dog's information, if it exists
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Dog info for updating
+        in: body
+        name: dog
+        required: true
+        schema:
+          $ref: '#/definitions/main.dog'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/main.dog'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update a dog's information, if it exists
+      tags:
+      - dogs
 swagger: "2.0"
