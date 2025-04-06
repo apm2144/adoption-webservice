@@ -2,7 +2,10 @@ module Users/alanmcnaney/adoption-webservice
 
 go 1.24.2
 
-require github.com/gin-gonic/gin v1.10.0
+require (
+	github.com/gin-gonic/gin v1.10.0
+	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394
+)
 
 require (
 	github.com/bytedance/sonic v1.11.6 // indirect

@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"golang.org/x/exp/slices"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,6 +32,7 @@ func main() {
 	router.GET("/v1/dogs", getDogs)
 	router.GET("/v1/dogs/:id", getDogByID)
 	router.POST("/v1/dogs/:id", updateDogById)
+	router.DELETE("v1/dogs/:id", adoptADog)
 	router.POST("/v1/dogs", postDog)
 
 	router.Run("localhost:8080")
@@ -101,4 +104,24 @@ func updateDogById(c *gin.Context) {
 		}
 	}
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "cannot update, dog not found"})
+}
+
+func adoptADog(c *gin.Context) {
+	str_id := c.Param("id")
+	id, err := strconv.Atoi(str_id)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid dog id type"})
+	}
+
+	// Loop over the list of dogs, looking for
+	// an dog whose ID value matches the parameter.
+	for i, a := range dogs {
+		if a.ID == id {
+			// delete here
+			dogs = slices.Delete(dogs, i, i+1)
+			c.IndentedJSON(http.StatusAccepted, a)
+			return
+		}
+	}
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "dog not found"})
 }
