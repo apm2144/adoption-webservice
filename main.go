@@ -90,11 +90,11 @@ func postDog(c *gin.Context) {
 //	@Description	Gets a dog by it's id
 //	@Tags			dogs
 //	@Produce		json
-//	@Param			id		path		int			true	"Dog ID"
+//	@Param			id		path		int		true	"Dog ID"
 //	@Success		200		{object}	dog
-//	@Failure		400		{object}	string
-//	@Failure		404		{object}	string
-//	@Failure		500		{object}	string
+//	@Failure		400		{object}	string	"invalid dog id"
+//	@Failure		404		{object}	string	"dog not found"
+//	@Failure		500		{object}	string	"internal server error"
 //	@Router			/v1/dogs/{id} [get]
 func getDogByID(c *gin.Context) {
 	str_id := c.Param("id")

@@ -95,19 +95,19 @@
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "invalid dog id",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "404": {
-                        "description": "Not Found",
+                        "description": "dog not found",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "internal server error",
                         "schema": {
                             "type": "string"
                         }
