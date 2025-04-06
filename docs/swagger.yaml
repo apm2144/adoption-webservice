@@ -35,7 +35,16 @@ paths:
       tags:
       - dogs
     post:
+      consumes:
+      - application/json
       description: Add a dog for adoption
+      parameters:
+      - description: Dog info for updating
+        in: body
+        name: dog
+        required: true
+        schema:
+          $ref: '#/definitions/main.dog'
       produces:
       - application/json
       responses:

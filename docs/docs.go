@@ -42,6 +42,9 @@ const docTemplate = `{
             },
             "post": {
                 "description": "Add a dog for adoption",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -49,6 +52,17 @@ const docTemplate = `{
                     "dogs"
                 ],
                 "summary": "Add a dog for adoption",
+                "parameters": [
+                    {
+                        "description": "Dog info for updating",
+                        "name": "dog",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.dog"
+                        }
+                    }
+                ],
                 "responses": {
                     "204": {
                         "description": "No Content",

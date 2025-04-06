@@ -62,7 +62,9 @@ func getDogs(c *gin.Context) {
 //	@Summary		Add a dog for adoption
 //	@Description	Add a dog for adoption
 //	@Tags			dogs
+//	@Accept			json
 //	@Produce		json
+//	@Param			dog		body		dog			true	"Dog info for updating"
 //	@Success		204		{object}	dog
 //	@Failure		500		{object}	string
 //	@Router			/v1/dogs [post]
