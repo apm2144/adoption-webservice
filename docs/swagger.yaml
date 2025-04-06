@@ -1,0 +1,19 @@
+basePath: /
+host: localhost:1337
+info:
+  contact:
+    email: almcnaney@gmail.com
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Tracking dogs that are available for adoption!
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Dog Adoption Service
+  version: "1.0"
+paths: {}
+schemes:
+- http
+- https
+swagger: "2.0"

@@ -7,6 +7,7 @@ import (
 	"golang.org/x/exp/slices"
 
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/gin-swagger"
 )
 
 // dog represents data about an adoptable dog
@@ -38,12 +39,28 @@ func main() {
 	router.Run("localhost:8080")
 }
 
-// getDogs responds with the list of all the adoptable dogs as JSON.
+// getDogs returns all available adoptable dogs
+//
+//	@Summary		Get all dogs available for adoption
+//	@Description	Get all dogs available for adoption
+//	@Tags			dogs
+//	@Produce		json
+//	@Success		200		{object} 	IndentedJSON
+//	@Failure		500		{object}	ErrorResponse
+//	@Router			/v1/dogs [get]
 func getDogs(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, dogs)
 }
 
-// postDog adds a dog from JSON received in the request body.
+// postDog adds a new dog from JSON received in the request body.
+//
+//	@Summary		Add a dog for adoption
+//	@Description	Add a dog for adoption
+//	@Tags			dogs
+//	@Produce		json
+//	@Success		204		{object} 	IndentedJSON
+//	@Failure		500		{object}	ErrorResponse
+//	@Router			/v1/dogs [post]
 func postDog(c *gin.Context) {
 	var newDog dog
 
@@ -60,6 +77,16 @@ func postDog(c *gin.Context) {
 
 // getDogByID locates the dog whose ID value matches the id
 // parameter sent by the client, then returns that dog as a response.
+//
+//	@Summary		Gets a dog by it's id
+//	@Description	Gets a dog by it's id
+//	@Tags			dogs
+//	@Produce		json
+//	@Param			id		path		int			true	"Dog ID"
+//	@Success		200		{object}	IndentedJSON
+//	@Failure		404		{object}	ErrorResponse
+//	@Failure		500		{object}	ErrorResponse
+//	@Router			/v1/dogs/{id} [get]
 func getDogByID(c *gin.Context) {
 	str_id := c.Param("id")
 	id, err := strconv.Atoi(str_id)
@@ -80,6 +107,19 @@ func getDogByID(c *gin.Context) {
 
 // updateDogById updates the information for a dog using the JSON presented
 // only updates if the dog already exists
+//
+//	@Summary		Update a dog's information, if it exists
+//	@Description	Update a dog's information, if it exists
+//	@Tags			dogs
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		int			true	"User ID"
+//	@Param			user	body		models.User	true	"User to update"
+//	@Success		204		{object}	interface{}
+//	@Failure		404		{object}	ErrorResponse
+//	@Failure		422		{object}	ErrorResponse
+//	@Failure		500		{object}	ErrorResponse
+//	@Router			/users/{id} [put]
 func updateDogById(c *gin.Context) {
 	str_id := c.Param("id")
 	id, err := strconv.Atoi(str_id)
