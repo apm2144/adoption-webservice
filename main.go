@@ -65,7 +65,7 @@ func getDogs(c *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			dog		body		dog			true	"Dog info for updating"
-//	@Success		204		{object}	dog
+//	@Success		201		{object}	dog
 //	@Failure		500		{object}	string
 //	@Router			/v1/dogs [post]
 func postDog(c *gin.Context) {
@@ -74,6 +74,7 @@ func postDog(c *gin.Context) {
 	// Call BindJSON to bind the received JSON to
 	// newDog.
 	if err := c.BindJSON(&newDog); err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "failed to bind new dog"})
 		return
 	}
 
@@ -91,6 +92,7 @@ func postDog(c *gin.Context) {
 //	@Produce		json
 //	@Param			id		path		int			true	"Dog ID"
 //	@Success		200		{object}	dog
+//	@Failure		400		{object}	string
 //	@Failure		404		{object}	string
 //	@Failure		500		{object}	string
 //	@Router			/v1/dogs/{id} [get]
@@ -122,7 +124,8 @@ func getDogByID(c *gin.Context) {
 //	@Produce		json
 //	@Param			id		path		int			true	"User ID"
 //	@Param			dog		body		dog			true	"Dog info for updating"
-//	@Success		204		{object}	dog
+//	@Success		201		{object}	dog
+//	@Failure		400		{object}	string
 //	@Failure		404		{object}	string
 //	@Failure		500		{object}	string
 //	@Router			/v1/dogs/{id} [post]
@@ -160,6 +163,7 @@ func updateDogById(c *gin.Context) {
 //	@Produce		json
 //	@Param			id		path		int			true	"User ID"
 //	@Success		202		{object}	dog
+//	@Failure		400		{object}	string
 //	@Failure		404		{object}	string
 //	@Failure		500		{object}	string
 //	@Router			/v1/dogs/{id} [delete]
